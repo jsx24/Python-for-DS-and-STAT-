@@ -1,0 +1,26 @@
+import pandas as pd
+import os
+
+
+
+dfs = []
+col_name = ["No.", "Comp", "Loc", "DM", "REP", "Long", "Width", "num", "laborhour", "cost", "other1", "other2"]
+for info in os.listdir(r"C:\Users\XXXX\Desktop\箱子"):
+    domain = os.path.abspath(r"C:\Users\XXXX\Desktop\箱子")
+    info = os.path.join(domain, info)
+    data = pd.read_excel(info)
+    data.columns = col_name
+    df2 = data.iloc[8:-4, 0:10]
+    df3 = df2[df2.index % 2 == 0]
+    a = data.iloc[0, 2]
+    b = data.iloc[1, 2]
+    c = data.iloc[4, -1]
+    df3.insert(df3.shape[1], "connum", a)
+    df3.insert(df3.shape[1], "contype", b)
+    df3.insert(df3.shape[1], "estimate_date", c)
+    df3 = df3.iloc[:,1:]
+    dfs.append(df3)
+
+bigframe = pd.concat(dfs, ignore_index = True)
+
+bigframe.to_csv(r"C:\Users\XXXX\Desktop\final.csv", index= False)
